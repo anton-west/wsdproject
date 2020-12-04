@@ -1,0 +1,14 @@
+import { Router } from "../deps.js";
+
+import * as controller from "./controllers/controller.js"
+
+const router = new Router();
+router.get('/', controller.test);
+
+router.get('/login', controller.showLoginPage);
+router.post('/login', controller.loginUser);
+
+router.get('/register', controller.showRegisterPage);
+router.post('/register', controller.registerUser);
+
+export { router };
