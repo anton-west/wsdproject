@@ -42,9 +42,51 @@ const sendMorningData = async(data) =>{
     await executeQuery(str, data.user_id, data.date, data.sleepDur, data.sleepQaul, data.generalMood);
 }
 
-const sendEveningData = async(data) =>{
+const sendEveningData = async(data) => {
     const str = "INSERT INTO evenings (user_id, date, sport_amount, study_amount, eating_qaulity, eating_regularity, mood) VALUES ($1, $2, $3, $4, $5, $6, $7)"
     await executeQuery(str, data.user_id, data.date, data.sportAmount, data.studyAmount, data.eatingQual, data.eatingReg,  data.generalMood);
 }
 
-export { userDoesNotExists, addUser, tryLogin, getUserId, sendMorningData, sendEveningData}
+const getMonthlyData = async(user_id, month) => {
+    let d = new Date();
+    let n = d.getMonth();
+
+    if(month != null) {
+        n = month;
+    }
+    const res = await executeQuery("SELECT AVG(sleep_amount), AVG(sleep_quality), AVG(mood) FROM mornings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", n, user_id);
+    console.log("monthly data: " + res.rows[0]);
+
+    return res.rows[0];
+}
+
+const getWeeklyData = async(user_id, week) => {
+    let n = getNumberOfWeek();
+
+    if(week != null) {
+        n = week;
+    }
+    const sleep = await executeQuery("SELECT AVG(sleep_amount), AVG(sleep_quality) FROM mornings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", n, user_id);
+    const sportsAndStudy = await executeQuery("SELECT AVG(sport_amount), AVG(study_amount) FROM evenings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", n, user_id);
+    const mood = await executeQuery("SELECT AVG(m.mood) FROM (SELECT user_id, mood, date FROM mornings UNION ALL SELECT user_id, mood, date FROM evenings) AS m WHERE EXTRACT(WEEK FROM date) = $1 AND m.user_id = $2", n, user_id);
+
+    const weeklyData = {
+        sleep: sleep.rows[0],
+        sportsAndStudy: sportsAndStudy.rows[0],
+        mood: mood.rows[0]
+    }
+    console.log(weeklyData);
+    return weeklyData;
+}
+
+const getNumberOfWeek = () => {
+    const today = new Date();
+    const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
+    const pastDaysOfYear = (today - firstDayOfYear) / 86400000;
+    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+}
+
+
+
+export { userDoesNotExists, addUser, tryLogin, getUserId, sendMorningData, sendEveningData,
+    getMonthlyData, getWeeklyData, getNumberOfWeek}

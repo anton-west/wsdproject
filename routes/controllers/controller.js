@@ -1,9 +1,6 @@
 import * as service from "../../services/service.js"
 
-const test = ({render}) => {
-    render('index.ejs');
-}
-
+//login and registering
 const showLoginPage = async({render, session, response}) => {
     const authenticated = await session.get('authenticated');
     if(authenticated) {
@@ -13,6 +10,7 @@ const showLoginPage = async({render, session, response}) => {
     console.log(authenticated);
     render('login.ejs');
 }
+
 
 const showRegisterPage = ({render}) => {
     render('register.ejs');
@@ -53,6 +51,7 @@ const loginUser = async ({request, response, session}) => {
     }
 }
 
+//reporting
 const showReportingPage = async({render, session, response}) => {
     const authenticated = await session.get('authenticated');
 
@@ -90,5 +89,27 @@ const handleReportData = async({session, request, response}) => {
 
 }
 
-export { test, showLoginPage, showRegisterPage, registerUser, loginUser,
-    showReportingPage, handleReportData};
+//summaries
+
+const showSummaryPage = async({render, session}) => {
+    const authenticated = await session.get('authenticated');
+
+    if(!authenticated) {
+        return
+    }
+    const user_id = await session.get('user_id');
+    const month = await service.getMonthlyData(user_id, null);
+    const week = await service.getWeeklyData(user_id, null);
+
+    const data = {
+        month: month,
+        week: week
+    };
+
+    console.log(data);
+
+    render('summary.ejs', data);
+}
+
+export { showLoginPage, showRegisterPage, registerUser, loginUser,
+    showReportingPage, handleReportData, showSummaryPage};
