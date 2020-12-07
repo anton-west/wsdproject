@@ -49,15 +49,22 @@ const sendEveningData = async(data) => {
 
 const getMonthlyData = async(user_id, month) => {
     let d = new Date();
-    let n = d.getMonth();
-
+    let n = d.getMonth() + 1;
+    
     if(month != null) {
         n = month;
     }
-    const res = await executeQuery("SELECT AVG(sleep_amount), AVG(sleep_quality), AVG(mood) FROM mornings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", n, user_id);
-    console.log("monthly data: " + res.rows[0]);
+   
+    const sleep = await executeQuery("SELECT AVG(sleep_amount), AVG(sleep_quality) FROM mornings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", n, user_id);
+    const sportsAndStudy = await executeQuery("SELECT AVG(sport_amount), AVG(study_amount) FROM evenings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", n, user_id);
+    const mood = await executeQuery("SELECT AVG(m.mood) FROM (SELECT user_id, mood, date FROM mornings UNION ALL SELECT user_id, mood, date FROM evenings) AS m WHERE EXTRACT(MONTH FROM date) = $1 AND m.user_id = $2", n, user_id);
 
-    return res.rows[0];
+    const monthlyData = {
+        sleep: sleep.rows[0],
+        sportsAndStudy: sportsAndStudy.rows[0],
+        mood: mood.rows[0]
+    }
+    return monthlyData;
 }
 
 const getWeeklyData = async(user_id, week) => {
@@ -66,6 +73,7 @@ const getWeeklyData = async(user_id, week) => {
     if(week != null) {
         n = week;
     }
+
     const sleep = await executeQuery("SELECT AVG(sleep_amount), AVG(sleep_quality) FROM mornings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", n, user_id);
     const sportsAndStudy = await executeQuery("SELECT AVG(sport_amount), AVG(study_amount) FROM evenings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", n, user_id);
     const mood = await executeQuery("SELECT AVG(m.mood) FROM (SELECT user_id, mood, date FROM mornings UNION ALL SELECT user_id, mood, date FROM evenings) AS m WHERE EXTRACT(WEEK FROM date) = $1 AND m.user_id = $2", n, user_id);
@@ -75,7 +83,7 @@ const getWeeklyData = async(user_id, week) => {
         sportsAndStudy: sportsAndStudy.rows[0],
         mood: mood.rows[0]
     }
-    console.log(weeklyData);
+
     return weeklyData;
 }
 

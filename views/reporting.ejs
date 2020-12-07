@@ -1,57 +1,66 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+
 <h1>Report!</h1>
 
-<h2>Morning!</h2>
+<script src="/static/code.js"></script>
 
-<form method="POST">
+<input type="button" id="button" onclick="changeReport()" value="click to fill out a evening report instead"/>
 
-    <p>date</p>
+<block style="display:block" id = "morning">
 
-    <input type="date" name="date"/>
+    <h3>morngin report!</h3>
 
-    <p>sleep duration</p>
+    <form method="POST">
+        <label for="date1">date</label>
+        <input type="date" name="date" id="date1"/>
     
-    <input type="number" name="sleep duration" min = "0" step="0.1"/>
-    
-    <p>sleep quality</p>
-    
-    <input type="number" name="sleep quality" min = "1" max = "5"/>
-    
-    <p>general mood</p>
-    
-    <input type="number" name="general mood" min = "1" max = "5"/>
-    
-    <input type="submit" value="Submit!" />
+        <label for="sleepdur">sleeping duration</label>
+        <input type="number" name="sleep duration" min = "0" step="0.1" id="sleepdur"/>
+        
+        <label for="sleppqual">sleeping quality</label>
+        <input type="number" name="sleep quality" min = "1" max = "5" id="sleepqual"/>
+        
+        <label for="generalmood1">general mood</label>    
+        <input type="number" name="general mood" min = "1" max = "5" id="generalmood1"/>
+        
+        <input type="submit" value="Submit!" />
+    </form>
+</block>
 
-</form>
+<block style="display:none" id = "evening">
 
-<h2>Evening!</h2>
+    <h3>evening report!</h3>
 
-<form method="POST">
+    <form method="POST">
 
-    <p>date</p>
+        <label for="date2">date</label>
+        <input type="date" name="date" id="date2"/>
 
-    <input type="date" name="date"/>
+        <label for="sportdur">sporting duration</label>
+        <input type="number" name="sport duration" min = "0" step="0.1" id="sportdur"/>
 
-    <p>time spent on sports and exercise</p>
-    
-    <input type="number" name="sport duration" min = "0" step="0.1"/>
-    
-    <p>time spent studying</p>
-    
-    <input type="number" name="study duration" min = "0" step="0.1"/>
+        <label for="studydur">studying duration</label>
+        <input type="number" name="study duration" min = "0" step="0.1" id=studydur/>
 
-    <p>regularity of eating</p>
-    
-    <input type="number" name="eating regularity" min = "1" max = "5"/>
+        <label for="eatingreg">eating regularity</label>
+        <input type="number" name="eating regularity" min = "1" max = "5" id="eatingreg"/>
 
-    <p>quality of eating</p>
-    
-    <input type="number" name="eating quality" min = "1" max = "5"/>
+        <label for="eatingqual">eating quality</label>
+        <input type="number" name="eating quality" min = "1" max = "5" id="eatingqual"/>
 
-    <p>general mood</p>
-    
-    <input type="number" name="general mood" min = "1" max = "5"/>
-    
-    <input type="submit" value="Submit!" />
+        <label for="generalmood2">general mood</label>
+        <input type="number" name="general mood" min = "1" max = "5" id="generalmood2"/>
+        
+        <input type="submit" value="Submit!" />
+        </form>
+</block>
 
-</form>
+
+</body>
+</html>
