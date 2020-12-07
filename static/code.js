@@ -1,7 +1,7 @@
 let isMorningReport = 1;
 
 const setMorningReport = () => {
-    document.getElementById("button").value="click to fill out a evening report instead";
+    document.getElementById("button").value="click to fill out an evening report instead";
     document.getElementById("morning").style="display:block";
     document.getElementById("evening").style="display:none";
     isMorningReport = 1;
