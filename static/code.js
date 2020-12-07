@@ -16,7 +16,6 @@ const setEveningReport = () => {
 
 
 const changeReport = () => {
-    console.log(isMorningReport);
     if(isMorningReport) {
         setEveningReport();
     } else {
