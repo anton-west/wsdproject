@@ -25,7 +25,7 @@ const registerUser = async ({request, response}) => {
     const email = params.get('email');
     const password = params.get('password');
 
-    if(service.userDoesNotExists(email)) {
+    if(service.userDoesNotExists(email) === true) {
         service.addUser(email, password);
         response.body = 'user registered';
     } else  {
@@ -40,9 +40,9 @@ const loginUser = async ({request, response, session}) => {
     const email = params.get('email');
     const password = params.get('password');
 
-    if(await service.userDoesNotExists(email)) {
+    if(await service.userDoesNotExists(email) === true) {
         response.body = 'an user with given email does not exist';
-    } else if (await service.tryLogin(email, password)) {
+    } else if (await service.tryLogin(email, password) === true) {
         await session.set("authenticated", true)
         await session.set("user_id", service.getUserId(email));
         response.body = 'you are now logged in';
@@ -107,7 +107,7 @@ const showSummaryPage = async({render, session, monthArg, weekArg}) => {
     if(monthArg != null && monthArg != "") {
         nOfMonth = monthArg;
     }
-    
+
     let nOfWeek = service.getNumberOfWeek();
     if(weekArg != null && weekArg != "") {
         nOfWeek = weekArg;
@@ -115,7 +115,7 @@ const showSummaryPage = async({render, session, monthArg, weekArg}) => {
 
     const user_id = await session.get('user_id');
     const month = await service.getMonthlyData(user_id, nOfMonth);
-    const week = await service.getWeeklyData(user_id, weekArg);
+    const week = await service.getWeeklyData(user_id, nOfWeek);
 
     const data = {
         nOfMonth: nOfMonth,

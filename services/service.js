@@ -4,6 +4,7 @@ import { bcrypt } from "../deps.js"
 //check if users is already registered, returns true if the given email does not exist in the database
 const userDoesNotExists = async(email) => {
     const res = await executeQuery("SELECT * FROM users WHERE email = $1", email);
+    console.log(res.rowsOfObjects());
     if(res.rowsOfObjects().length === 0) {
         return true;
     } else {
@@ -52,15 +53,17 @@ const precision = 4;
 
 const getMonthlyData = async(user_id, month) => {
    
-    const sleep = await executeQuery("SELECT AVG(sleep_amount), AVG(sleep_quality) FROM mornings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", month, user_id);
-    const sportsAndStudy = await executeQuery("SELECT AVG(sport_amount), AVG(study_amount) FROM evenings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", month, user_id);
+    const sleepDur = await executeQuery("SELECT AVG(sleep_amount) FROM mornings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", month, user_id);
+    const sleepQual = await executeQuery("SELECT AVG(sleep_quality) FROM mornings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", month, user_id);
+    const sportDur = await executeQuery("SELECT AVG(sport_amount), AVG(study_amount) FROM evenings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", month, user_id);
+    const studyDur = await executeQuery("SELECT AVG(study_amount) FROM evenings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", month, user_id);
     const mood = await executeQuery("SELECT AVG(m.mood) FROM (SELECT user_id, mood, date FROM mornings UNION ALL SELECT user_id, mood, date FROM evenings) AS m WHERE EXTRACT(MONTH FROM date) = $1 AND m.user_id = $2", month, user_id);
 
     const monthlyData = {
-        sleepDur: Number(sleep.rows[0][0]).toPrecision(precision),
-        sleepQual: Number(sleep.rows[0][1]).toPrecision(precision),
-        sportDur: Number(sportsAndStudy.rows[0][0]).toPrecision(precision),
-        studyDur: Number(sportsAndStudy.rows[0][1]).toPrecision(precision),
+        sleepDur: Number(sleepDur.rows[0][0]).toPrecision(precision),
+        sleepQual: Number(sleepQual.rows[0][0]).toPrecision(precision),
+        sportDur: Number(sportDur.rows[0][0]).toPrecision(precision),
+        studyDur: Number(studyDur.rows[0][0]).toPrecision(precision),
         generalMood: Number(mood.rows[0][0]).toPrecision(precision)
     }
 
@@ -69,17 +72,19 @@ const getMonthlyData = async(user_id, month) => {
     return monthlyData;
 }
 
-const getWeeklyData = async(user_id, week) => {
+const getWeeklyData = async(user_id, week) => { 
 
-    const sleep = await executeQuery("SELECT AVG(sleep_amount), AVG(sleep_quality) FROM mornings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", week, user_id);
-    const sportsAndStudy = await executeQuery("SELECT AVG(sport_amount), AVG(study_amount) FROM evenings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", week, user_id);
+    const sleepDur = await executeQuery("SELECT AVG(sleep_amount) FROM mornings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", week, user_id);
+    const sleepQual = await executeQuery("SELECT AVG(sleep_quality) FROM mornings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", week, user_id);
+    const sportDur = await executeQuery("SELECT AVG(sport_amount), AVG(study_amount) FROM evenings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", week, user_id);
+    const studyDur = await executeQuery("SELECT AVG(study_amount) FROM evenings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", week, user_id);
     const mood = await executeQuery("SELECT AVG(m.mood) FROM (SELECT user_id, mood, date FROM mornings UNION ALL SELECT user_id, mood, date FROM evenings) AS m WHERE EXTRACT(WEEK FROM date) = $1 AND m.user_id = $2", week, user_id);
 
     const weeklyData = {
-        sleepDur: Number(sleep.rows[0][0]).toPrecision(precision),
-        sleepQual: Number(sleep.rows[0][1]).toPrecision(precision),
-        sportDur: Number(sportsAndStudy.rows[0][0]).toPrecision(precision),
-        studyDur: Number(sportsAndStudy.rows[0][1]).toPrecision(precision),
+        sleepDur: Number(sleepDur.rows[0][0]).toPrecision(precision),
+        sleepQual: Number(sleepQual.rows[0][0]).toPrecision(precision),
+        sportDur: Number(sportDur.rows[0][0]).toPrecision(precision),
+        studyDur: Number(studyDur.rows[0][0]).toPrecision(precision),
         generalMood: Number(mood.rows[0][0]).toPrecision(precision)
     }
 
