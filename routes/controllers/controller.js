@@ -33,7 +33,7 @@ const registerUser = async ({request, response}) => {
     }
 }
 
-const loginUser = async ({request, response, session}) => {
+const loginUser = async ({request, response, session, render}) => {
     const body = request.body();
     const params = await body.value;
 
@@ -45,7 +45,7 @@ const loginUser = async ({request, response, session}) => {
     } else if (await service.tryLogin(email, password) === true) {
         await session.set("authenticated", true)
         await session.set("user_id", service.getUserId(email));
-        response.body = 'you are now logged in';
+        showSummaryPage(render, session)
     } else {
         response.body = 'incorrect password';
     }
