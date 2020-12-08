@@ -14,5 +14,6 @@ router.get('/behavior/reporting', controller.showReportingPage);
 router.post('/behavior/reporting', controller.handleReportData);
 
 router.get('/behavior/summary', controller.showSummaryPage);
+router.post('/behavior/summary', controller.summaryPageInput);
 
 export { router };

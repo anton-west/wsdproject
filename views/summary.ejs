@@ -4,28 +4,30 @@
 
 <h1>Summary!</h1>
 
-<h3>Monthly Averages:</h3>
+<form method="POST">
+    <label for="month">month</label>
+    <input type="number" name="month" id="month" min="1" max="12" value="<%= nOfMonth %>"/>
+
+    <label for="week">week</label>
+    <input type="number" name="week" id="week" min="1" max="52" value="<%= nOfWeek %>"/>
+    
+    <input type="submit" value="change month and week" />
+</form>
+
+<h3>Monthly averages for month: <%= nOfMonth %></h3>
 
 <p>Average amount slept: <%= month.sleepDur %></p>
-
 <p>Average sleep quality: <%= month.sleepQual %></p>
-
 <p>Average amount exercised: <%= month.sportDur %></p>
-
 <p>Average amount stduied: <%= month.studyDur %></p>
-
 <p>Average mood: <%= month.generalMood %></p>
 
-<h3>Weekly Averages:</h3>
+<h3>Weekly averages for week: <%= nOfWeek %></h3>
 
 <p>Average amount slept: <%= week.sleepDur %></p>
-
 <p>Average sleep quality: <%= week.sleepQual %></p>
-
 <p>Average amount exercised: <%= week.sportDur %></p>
-
 <p>Average amount stduied: <%= week.studyDur %></p>
-
 <p>Average mood: <%= week.generalMood %></p>
 
 </div>

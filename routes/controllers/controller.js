@@ -67,7 +67,7 @@ const handleReportData = async({session, request, response}) => {
     const body = request.body();
     const params = await body.value;
 
-    if(params.has('sleep duration')) {
+    if(params.has('morning')) {
 
         const data = {
             user_id: await session.get('user_id'),
@@ -95,17 +95,31 @@ const handleReportData = async({session, request, response}) => {
 
 //summaries
 
-const showSummaryPage = async({render, session}) => {
+const showSummaryPage = async({render, session, monthArg, weekArg}) => {
     const authenticated = await session.get('authenticated');
 
     if(!authenticated) {
         return
     }
+
+    let d = new Date();
+    let nOfMonth = d.getMonth() + 1;
+    if(monthArg != null && monthArg != "") {
+        nOfMonth = monthArg;
+    }
+    
+    let nOfWeek = service.getNumberOfWeek();
+    if(weekArg != null && weekArg != "") {
+        nOfWeek = weekArg;
+    }
+
     const user_id = await session.get('user_id');
-    const month = await service.getMonthlyData(user_id, null);
-    const week = await service.getWeeklyData(user_id, null);
+    const month = await service.getMonthlyData(user_id, nOfMonth);
+    const week = await service.getWeeklyData(user_id, weekArg);
 
     const data = {
+        nOfMonth: nOfMonth,
+        nOfWeek: nOfWeek,
         month: month,
         week: week
     };
@@ -115,5 +129,17 @@ const showSummaryPage = async({render, session}) => {
     render('summary.ejs', data);
 }
 
+const summaryPageInput = async({render, session, request}) => {
+    const body = request.body();
+    const params = await body.value;
+
+    const month = params.get('month');
+    const week = params.get('week');
+
+    console.log("month: "+month+", week: "+week);
+
+    await showSummaryPage({render, session, monthArg:month, weekArg:week});
+}
+
 export { showLoginPage, showRegisterPage, registerUser, loginUser,
-    showReportingPage, handleReportData, showSummaryPage};
+    showReportingPage, handleReportData, showSummaryPage, summaryPageInput};
