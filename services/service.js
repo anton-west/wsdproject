@@ -48,6 +48,8 @@ const sendEveningData = async(data) => {
     await executeQuery(str, data.user_id, data.date, data.sportDur, data.studyDur, data.eatingQual, data.eatingReg,  data.generalMood);
 }
 
+const precision = 4;
+
 const getMonthlyData = async(user_id, month) => {
     let d = new Date();
     let n = d.getMonth() + 1;
@@ -61,10 +63,15 @@ const getMonthlyData = async(user_id, month) => {
     const mood = await executeQuery("SELECT AVG(m.mood) FROM (SELECT user_id, mood, date FROM mornings UNION ALL SELECT user_id, mood, date FROM evenings) AS m WHERE EXTRACT(MONTH FROM date) = $1 AND m.user_id = $2", n, user_id);
 
     const monthlyData = {
-        sleep: sleep.rows[0],
-        sportsAndStudy: sportsAndStudy.rows[0],
-        mood: mood.rows[0]
+        sleepDur: Number(sleep.rows[0][0]).toPrecision(precision),
+        sleepQual: Number(sleep.rows[0][1]).toPrecision(precision),
+        sportDur: Number(sportsAndStudy.rows[0][0]).toPrecision(precision),
+        studyDur: Number(sportsAndStudy.rows[0][1]).toPrecision(precision),
+        generalMood: Number(mood.rows[0][0]).toPrecision(precision)
     }
+
+    console.log(monthlyData);
+
     return monthlyData;
 }
 
@@ -80,10 +87,14 @@ const getWeeklyData = async(user_id, week) => {
     const mood = await executeQuery("SELECT AVG(m.mood) FROM (SELECT user_id, mood, date FROM mornings UNION ALL SELECT user_id, mood, date FROM evenings) AS m WHERE EXTRACT(WEEK FROM date) = $1 AND m.user_id = $2", n, user_id);
 
     const weeklyData = {
-        sleep: sleep.rows[0],
-        sportsAndStudy: sportsAndStudy.rows[0],
-        mood: mood.rows[0]
+        sleepDur: Number(sleep.rows[0][0]).toPrecision(precision),
+        sleepQual: Number(sleep.rows[0][1]).toPrecision(precision),
+        sportDur: Number(sportsAndStudy.rows[0][0]).toPrecision(precision),
+        studyDur: Number(sportsAndStudy.rows[0][1]).toPrecision(precision),
+        generalMood: Number(mood.rows[0][0]).toPrecision(precision)
     }
+
+    console.log(weeklyData);
 
     return weeklyData;
 }
