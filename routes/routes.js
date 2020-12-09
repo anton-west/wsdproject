@@ -4,6 +4,8 @@ import * as userController from "./controllers/userController.js"
 
 const router = new Router();
 
+router.get('/', userController.showLandingPage);
+
 router.get('/auth/login', userController.showLoginPage);
 router.get('/auth/logout', userController.showLogoutPage);
 router.post('/auth/login', userController.loginUser);

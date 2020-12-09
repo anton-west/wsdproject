@@ -1,5 +1,16 @@
 <%- include('./partials/header.ejs') %>
 
-<h1>Hello world!</h1>
+<div class="content">
+
+    <h1>Activity Tracker</h1>
+
+    <p>This is a small web application that allows users to track their activities</p>
+
+    <% if(authenticated) { %>
+        <p>see your <a href="/behavior/summary"><u>summary</u></a> or make a <a href="/behavior/reporting"><u>report</u></a></p>
+    <% } else { %>
+        <p><a href="/auth/login"><u>login</u></a> or <a href="/auth/registration"><u>register</u></a></p>
+    <% } %>
+</div>
 
 <%- include('./partials/footer.ejs') %>

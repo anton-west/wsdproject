@@ -3,6 +3,17 @@ import * as vdService from "../../services/validationService.js"  //validation s
 import * as rprtService from "../../services/reportService.js"  //reporting services
 
 ////////////////////////////////////////////////////////////////////////////////
+//landing page
+////////////////////////////////////////////////////////////////////////////////
+
+const showLandingPage = async({render, session}) => {
+    const data = {
+        authenticated: await session.get("authenticated"),
+    };
+    render('index.ejs', data);
+}
+
+////////////////////////////////////////////////////////////////////////////////
 //loggin in and registering
 ////////////////////////////////////////////////////////////////////////////////
 
@@ -135,5 +146,5 @@ const summaryPageInput = async({render, session, request}) => {
     await showSummaryPage({render, session, monthArg:month, weekArg:week});
 }
 
-export { showLoginPage, showRegisterPage, showLogoutPage, registerUser, loginUser, logoutUser,
+export { showLandingPage, showLoginPage, showRegisterPage, showLogoutPage, registerUser, loginUser, logoutUser,
     showReportingPage, handleReportData, showSummaryPage, summaryPageInput };
