@@ -134,7 +134,7 @@ export const getReportData = async(session, request) => {
 export const morningReportDone = async(user_id) => {
     const d = new Date();
     const dateString= d.toISOString().substring(0,10);
-
+    
     const res = await executeQuery("SELECT * FROM mornings WHERE date = $1 AND user_id = $2", dateString, user_id);
     if(res.rowsOfObjects().length > 0) {
         return true;

@@ -52,7 +52,7 @@ const loginUser = async ({request, response, session, render}) => {
         //set some session cookies    
         await session.set("authenticated", true)
         await session.set("user_id", userService.getUserId(data.email));
-        response.redirect('/behavior/summary');
+        response.redirect('/');
     } else {
         render('login.ejs', data);
     }
@@ -93,9 +93,9 @@ const handleReportData = async({request, render, session, response}) => {
         rprtService.sendReportData(reportData);
         response.redirect('/behavior/reporting');
     }
-
-    const morningDone = await rprtService.morningReportDone(session);
-    const eveningDone = await rprtService.eveningReportDone(session);
+    const user_id = await session.get('user_id');
+    const morningDone = await rprtService.morningReportDone(user_id);
+    const eveningDone = await rprtService.eveningReportDone(user_id);
 
     reportData.morningDone = morningDone;
     reportData.eveningDone = eveningDone;
