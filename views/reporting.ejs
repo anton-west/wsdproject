@@ -4,13 +4,17 @@
 
 <h1>Report!</h1>
 
-<script src="/static/code.js"></script>
+<script src="/static/code.js" defer></script>
 
 <input type="button" id="button" onclick="changeReport()" value="click to fill out an evening report instead"/>
 
 <block style="display:block" id = "morning">
 
     <h3>morngin report</h3>
+
+    <% if(morningDone) { %>
+        <p>A morning report for today has already been made</p>
+    <% } %>
 
     <form method="POST">
         <input type="hidden" name="morning" value="1">
@@ -34,6 +38,10 @@
 <block style="display:none" id = "evening">
 
     <h3>evening report</h3>
+
+    <% if(eveningDone) { %>
+        <p>An evening report for today has already been made</p>
+    <% } %>
 
     <form method="POST">
         <input type="hidden" name="evening" value="1">

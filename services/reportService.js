@@ -99,3 +99,30 @@ export const getReportData = async(request, session) => {
     }
 }
 
+export const morningReportDone = async(session) => {
+    const user_id = await session.get('user_id');
+
+    const d = new Date();
+    const dateString= d.toISOString().substring(0,10);
+
+    const res = await executeQuery("SELECT * FROM mornings WHERE date = $1 AND user_id = $2", dateString, user_id);
+    if(res.rowsOfObjects().length > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+export const eveningReportDone = async(session) => {
+    const user_id = await session.get('user_id');
+
+    const d = new Date();
+    const dateString= d.toISOString().substring(0, 10);
+
+    const res = await executeQuery("SELECT * FROM evenings WHERE date = $1 AND user_id = $2", dateString, user_id);
+    if(res.rowsOfObjects().length > 0) {
+        return true;
+    } else {
+        return false;
+    }
+}

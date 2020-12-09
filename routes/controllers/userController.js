@@ -6,12 +6,16 @@ import * as rprtService from "../../services/reportService.js"  //reporting serv
 //loggin in and registering
 ////////////////////////////////////////////////////////////////////////////////
 
-const showLoginPage = async({render, session, response}) => {
+const showLoginPage = async({render}) => {
     render('login.ejs', await userService.getLoginData());
 }
 
 const showRegisterPage = async ({render}) => {
     render('register.ejs', await userService.getRegistrationData());
+}
+
+const showLogoutPage = async({render}) => {
+    render('logout.ejs');
 }
 
 const registerUser = async ({request, render}) => {
@@ -42,19 +46,27 @@ const loginUser = async ({request, response, session, render}) => {
     }
 }
 
+const logoutUser = async ({session, response}) => {
+    session.set('authenticated', false);
+    response.redirect('/');
+}
+
+
 ////////////////////////////////////////////////////////////////////////////////
 //reporting
 ////////////////////////////////////////////////////////////////////////////////
 
-const showReportingPage = async({render, session, response}) => {
-    const authenticated = await session.get('authenticated');
+const showReportingPage = async({ render, session }) => {
 
-    if(authenticated) {
-        render('reporting.ejs');
-    } else {
-        response.redirect('/auth/login');
-    }
-    
+    const morningDone = await rprtService.morningReportDone(session);
+    const eveningDone = await rprtService.eveningReportDone(session);
+
+    const data = {
+        morningDone: morningDone,
+        eveningDone: eveningDone
+    };  
+
+    render('reporting.ejs', data);
 }
 
 const handleReportData = async({request, session}) => {
@@ -67,12 +79,6 @@ const handleReportData = async({request, session}) => {
 ////////////////////////////////////////////////////////////////////////////////
 
 const showSummaryPage = async({render, session, monthArg, weekArg}) => {
-    const authenticated = await session.get('authenticated');
-
-    if(!authenticated) {
-        return
-    }
-
     let d = new Date();
     let nOfMonth = d.getMonth() + 1;
     if(monthArg != null && monthArg != "") {
@@ -112,5 +118,5 @@ const summaryPageInput = async({render, session, request}) => {
     await showSummaryPage({render, session, monthArg:month, weekArg:week});
 }
 
-export { showLoginPage, showRegisterPage, registerUser, loginUser,
-    showReportingPage, handleReportData, showSummaryPage, summaryPageInput};
+export { showLoginPage, showRegisterPage, showLogoutPage, registerUser, loginUser, logoutUser,
+    showReportingPage, handleReportData, showSummaryPage, summaryPageInput };

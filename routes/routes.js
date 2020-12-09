@@ -5,7 +5,9 @@ import * as userController from "./controllers/userController.js"
 const router = new Router();
 
 router.get('/auth/login', userController.showLoginPage);
+router.get('/auth/logout', userController.showLogoutPage);
 router.post('/auth/login', userController.loginUser);
+router.post('/auth/logout', userController.logoutUser);
 
 router.get('/auth/registration', userController.showRegisterPage);
 router.post('/auth/registration', userController.registerUser);

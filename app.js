@@ -17,8 +17,9 @@ await session.init();
 app.use(session.use()(session));
 
 app.use(middleware.errorMiddleware);
-app.use(middleware.requestTimingMiddleware);
+app.use(middleware.logMiddleware);
 app.use(middleware.serveStaticFiles);
+app.use(middleware.checkAccessMiddleware);
 
 app.use(router.routes());
 

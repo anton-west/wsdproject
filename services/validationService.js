@@ -67,15 +67,12 @@ export const validateRegistrationData = async (data) => {
 }
 
 export const validateLoginData = async (data) => {
-
     const [passes, errors] = await vs.validate(data, loginRules);
-
     data.errors = errors;
-    const user = await userExists(data.email);
-    const passwordCorrect = await passwordMatches(data.email, data.password);
-    if(passes && !user) {
+
+    if(passes && ! await userExists(data.email)) {
             data.errors.email = {required: "wrong password or email" };
-    } else if(passes && !passwordCorrect) {
+    } else if(passes && ! await passwordMatches(data.email, data.password)) {
             data.errors.email = {required: "wrong password or email" };
     }
     return data;

@@ -8,7 +8,11 @@
         <input type="password" name="password" label="password" id="password"/>
         <input type="submit" value="Login!" />
     </form>
+    
     <%- include('./partials/errors.ejs') %>
+
+    <p>Don't have an account? <a href="/auth/registration">Click here to register!</a></p>
+
 </div>
 
 <%- include('./partials/footer.ejs') %>
