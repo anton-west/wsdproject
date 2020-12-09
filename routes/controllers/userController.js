@@ -60,8 +60,9 @@ const showReportingPage = async({ render, session }) => {
 
     let data = await rprtService.getReportData(session);
 
-    const morningDone = await rprtService.morningReportDone(session);
-    const eveningDone = await rprtService.eveningReportDone(session);
+    const user_id = await session.get('user_id');
+    const morningDone = await rprtService.morningReportDone(user_id);
+    const eveningDone = await rprtService.eveningReportDone(user_id);
 
     data.morningDone = morningDone;
     data.eveningDone = eveningDone;

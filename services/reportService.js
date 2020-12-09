@@ -15,12 +15,22 @@ import * as vdService from "./validationService.js"
 
  //insert user specific morning report to db
 const sendMorningData = async(data) =>{
+    const res = await executeQuery("SELECT * FROM mornings WHERE date = $1 AND user_id = $2", data.date, data.user_id);
+    if(res.rowsOfObjects().length > 0) {
+        await executeQuery("DELETE FROM mornings WHERE date = $1 AND user_id = $2", data.date, data.user_id);
+    }
+
     const str = "INSERT INTO mornings (user_id, date, sleep_amount, sleep_quality, mood) VALUES ($1, $2, $3, $4, $5)"
     executeQuery(str, data.user_id, data.date, data.sleepDur, data.sleepQual, data.generalMood);
 }
 
 //insert user specific evening report to db
 const sendEveningData = async(data) => {
+    const res = await executeQuery("SELECT * FROM evenings WHERE date = $1 AND user_id = $2", data.date, data.user_id);
+    if(res.rowsOfObjects().length > 0) {
+        await executeQuery("DELETE FROM evenings WHERE date = $1 AND user_id = $2", data.date, data.user_id);
+    }
+
     const str = "INSERT INTO evenings (user_id, date, sport_amount, study_amount, eating_quality, eating_regularity, mood) VALUES ($1, $2, $3, $4, $5, $6, $7)"
     executeQuery(str, data.user_id, data.date, data.sportDur, data.studyDur, data.eatingQual, data.eatingReg,  data.generalMood);
 }
@@ -116,14 +126,12 @@ export const getReportData = async(session, request) => {
         data.eatingQual = Number(params.get('eating quality')),
         data.generalMood = Number(params.get('general mood')),
 
-        data = await validateEveningData(data);
+        data = await vdService.validateEveningData(data);
         return data;
     }
 }
 
-export const morningReportDone = async(session) => {
-    const user_id = await session.get('user_id');
-
+export const morningReportDone = async(user_id) => {
     const d = new Date();
     const dateString= d.toISOString().substring(0,10);
 
@@ -135,9 +143,7 @@ export const morningReportDone = async(session) => {
     }
 }
 
-export const eveningReportDone = async(session) => {
-    const user_id = await session.get('user_id');
-
+export const eveningReportDone = async(user_id) => {
     const d = new Date();
     const dateString= d.toISOString().substring(0, 10);
 
