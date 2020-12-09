@@ -154,3 +154,18 @@ export const eveningReportDone = async(user_id) => {
         return false;
     }
 }
+
+export const getCondition = async () => {
+    const yesterday = await executeQuery("SELECT AVG(m.mood) FROM (SELECT mood, date FROM mornings UNION ALL SELECT mood, date FROM evenings) AS m WHERE date = (DATE(NOW()) - 1)");
+    const today = await executeQuery("SELECT AVG(m.mood) FROM (SELECT mood, date FROM mornings UNION ALL SELECT mood, date FROM evenings) AS m WHERE date = (DATE(NOW()))");
+
+    const oldData = yesterday.rows[0];
+    const newData = today.rows[0];
+
+    if(newData >= oldData) {
+        return true;
+    } else {
+        return false;
+    }
+
+}

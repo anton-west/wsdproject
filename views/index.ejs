@@ -11,6 +11,12 @@
     <% } else { %>
         <p><a href="/auth/login"><u>login</u></a> or <a href="/auth/registration"><u>register</u></a></p>
     <% } %>
+
+    <% if(condition) { %>
+        <p>things are looking bright today</p>
+    <% } else { %>
+        <p>things are looking gloomy today</p>
+    <% } %>
 </div>
 
 <%- include('./partials/footer.ejs') %>

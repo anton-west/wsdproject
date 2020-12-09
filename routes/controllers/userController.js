@@ -9,6 +9,7 @@ import * as rprtService from "../../services/reportService.js"  //reporting serv
 const showLandingPage = async({render, session}) => {
     const data = {
         authenticated: await session.get("authenticated"),
+        condition: await rprtService.getCondition()
     };
     render('index.ejs', data);
 }
