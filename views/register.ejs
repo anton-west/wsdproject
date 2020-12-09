@@ -4,20 +4,19 @@
     <h1>Register!</h1>
     <form method="POST">
     
-        <p>email</p>
+        <label for="email">email</label>
+        <input type="email" name="email" value="<%= email %>" id="email"/>
     
-        <input type="email" name="email"/>
+        <label for="pw">password</label>
+        <input type="password" name="password" id="pw"/>
     
-        <p>password</p>
-    
-        <input type="password" name="password"/>
-    
-        <p>verify password</p>
-    
-        <input type="password" name="verification"/>
+        <label for="verification">verify password</label>
+        <input type="password" name="verification" id="verification"/>
     
         <input type="submit" value="Register!" />
     </form>
+
+    <%- include('./partials/errors.ejs') %>
 </div>
 
 <%- include('./partials/footer.ejs') %>

@@ -1,19 +1,19 @@
 import { Router } from "../deps.js";
 
-import * as controller from "./controllers/controller.js"
+import * as userController from "./controllers/userController.js"
 
 const router = new Router();
 
-router.get('/login', controller.showLoginPage);
-router.post('/login', controller.loginUser);
+router.get('/auth/login', userController.showLoginPage);
+router.post('/auth/login', userController.loginUser);
 
-router.get('/register', controller.showRegisterPage);
-router.post('/register', controller.registerUser);
+router.get('/auth/registration', userController.showRegisterPage);
+router.post('/auth/registration', userController.registerUser);
 
-router.get('/behavior/reporting', controller.showReportingPage);
-router.post('/behavior/reporting', controller.handleReportData);
+router.get('/behavior/reporting', userController.showReportingPage);
+router.post('/behavior/reporting', userController.handleReportData);
 
-router.get('/behavior/summary', controller.showSummaryPage);
-router.post('/behavior/summary', controller.summaryPageInput);
+router.get('/behavior/summary', userController.showSummaryPage);
+router.post('/behavior/summary', userController.summaryPageInput);
 
 export { router };

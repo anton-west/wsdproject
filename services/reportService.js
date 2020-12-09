@@ -1,57 +1,33 @@
 import { executeQuery } from "../database/database.js"
-import { bcrypt } from "../deps.js"
+/**
+ * Functions that handle inserting and retrieving
+ * report data from the database go here
+ */
 
-//check if users is already registered, returns true if the given email does not exist in the database
-const userDoesNotExists = async(email) => {
-    const res = await executeQuery("SELECT * FROM users WHERE email = $1", email);
-    console.log(res.rowsOfObjects());
-    if(res.rowsOfObjects().length === 0) {
-        return true;
-    } else {
-        return false;
-    }
-}
+ export const sendReportData = async(data) => {
+     if(data.hasOwnProperty('morning')) {
+        sendMorningData(data);
+     } else {
+        sendEveningData(data);
+     }
+ }
 
-//add the user to the database
-const addUser = async(email, password) => {
-    const hash = await bcrypt.hash(password);
-    await executeQuery("INSERT INTO users (email, password) VALUES ($1, $2)", email, hash);
-}
-
-const tryLogin = async(email, password) => {
-    const res = await executeQuery("SELECT * FROM users WHERE email = $1", email);
-    const obj = res.rowsOfObjects()[0];
-
-    const hash = obj.password;
-
-    const passwordCorrect = await bcrypt.compare(password, hash);
-    if (!passwordCorrect) {
-        return false;
-    }
-    return true;
-}
-
-const getUserId = async(email) => {
-    const res = await executeQuery("SELECT * FROM users WHERE email = $1", email);
-    const data = res.rowsOfObjects()[0];
-    console.log("user id: " + data.id);
-    return data.id;
-}
-
+ //insert user specific morning report to db
 const sendMorningData = async(data) =>{
     const str = "INSERT INTO mornings (user_id, date, sleep_amount, sleep_quality, mood) VALUES ($1, $2, $3, $4, $5)"
-    await executeQuery(str, data.user_id, data.date, data.sleepDur, data.sleepQaul, data.generalMood);
+    executeQuery(str, data.user_id, data.date, data.sleepDur, data.sleepQaul, data.generalMood);
 }
 
+//insert user specific evening report to db
 const sendEveningData = async(data) => {
-    console.log(data);
     const str = "INSERT INTO evenings (user_id, date, sport_amount, study_amount, eating_quality, eating_regularity, mood) VALUES ($1, $2, $3, $4, $5, $6, $7)"
-    await executeQuery(str, data.user_id, data.date, data.sportDur, data.studyDur, data.eatingQual, data.eatingReg,  data.generalMood);
+    executeQuery(str, data.user_id, data.date, data.sportDur, data.studyDur, data.eatingQual, data.eatingReg,  data.generalMood);
 }
 
 const precision = 4;
 
-const getMonthlyData = async(user_id, month) => {
+//get user specific monthly average data from db
+export const getMonthlyData = async(user_id, month) => {
    
     const sleepDur = await executeQuery("SELECT AVG(sleep_amount) FROM mornings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", month, user_id);
     const sleepQual = await executeQuery("SELECT AVG(sleep_quality) FROM mornings WHERE EXTRACT(MONTH FROM date) = $1 AND user_id = $2", month, user_id);
@@ -72,7 +48,8 @@ const getMonthlyData = async(user_id, month) => {
     return monthlyData;
 }
 
-const getWeeklyData = async(user_id, week) => { 
+//get user specific weekly average data from db
+export const getWeeklyData = async(user_id, week) => { 
 
     const sleepDur = await executeQuery("SELECT AVG(sleep_amount) FROM mornings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", week, user_id);
     const sleepQual = await executeQuery("SELECT AVG(sleep_quality) FROM mornings WHERE EXTRACT(WEEK FROM date) = $1 AND user_id = $2", week, user_id);
@@ -93,14 +70,32 @@ const getWeeklyData = async(user_id, week) => {
     return weeklyData;
 }
 
-const getNumberOfWeek = () => {
-    const today = new Date();
-    const firstDayOfYear = new Date(today.getFullYear(), 0, 1);
-    const pastDaysOfYear = (today - firstDayOfYear) / 86400000;
-    return Math.ceil((pastDaysOfYear + firstDayOfYear.getDay() + 1) / 7);
+export const getReportData = async(request, session) => {
+    const body = request.body();
+    const params = await body.value;
+
+    if(params.has('morning')) {
+        const data = {
+            user_id: await session.get('user_id'),
+            date: params.get('date'),
+            sleepDur: Number(params.get('sleep duration')),
+            sleepQaul: Number(params.get('sleep quality')),
+            generalMood: Number(params.get('general mood'))
+        };
+        
+        return data;
+    } else {
+        const data = {
+            user_id: await session.get('user_id'),
+            date: params.get('date'),
+            sportDur: Number(params.get('sport duration')),
+            studyDur: Number(params.get('study duration')),
+            eatingReg: Number(params.get('eating regularity')),
+            eatingQual: Number(params.get('eating quality')),
+            generalMood: Number(params.get('general mood'))
+        };
+
+        return data;
+    }
 }
 
-
-
-export { userDoesNotExists, addUser, tryLogin, getUserId, sendMorningData, sendEveningData,
-    getMonthlyData, getWeeklyData, getNumberOfWeek}
