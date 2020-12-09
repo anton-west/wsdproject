@@ -1,6 +1,6 @@
 <%- include('./partials/header.ejs') %>
 
-<div class="content">
+<div class="hcenter">
 
     <h1>Activity Tracker</h1>
 
@@ -9,7 +9,7 @@
     <% if(authenticated) { %>
         <p>see your <a href="/behavior/summary"><u>summary</u></a> or make a <a href="/behavior/reporting"><u>report</u></a></p>
     <% } else { %>
-        <p><a href="/auth/login"><u>login</u></a> or <a href="/auth/registration"><u>register</u></a></p>
+        <p><a href="/auth/login"><u>login</u></a> or <a href="/auth/registration"><u>register</u></a> to begin</p>
     <% } %>
 
     <p> 

@@ -23,7 +23,7 @@
         <input type="date" name="date" id="date1"/>
     
         <label for="sleepdur">sleeping duration</label>
-        <input type="number" name="sleep duration" value="<%= sleepDur %>" step="0.1" id="sleepdur"/>
+        <input type="number" name="sleep duration" value="<%= sleepDur %>" min="0"step="0.1" id="sleepdur"/>
         
         <label for="sleppqual">sleeping quality</label>
         <input type="number" name="sleep quality" value="<%= sleepQual %>" min = "1" max = "5" id="sleepqual"/>
@@ -50,7 +50,7 @@
         <input type="date" name="date" id="date2"/>
 
         <label for="sportdur">sporting duration</label>
-        <input type="number" name="sport duration" value="<%= sportDur %>" min = "0" step="0.1" id="sportdur"/>
+        <input type="number" name="sport duration" value="<%= sportDur %>" min="0" step="0.1" id="sportdur"/>
 
         <label for="studydur">studying duration</label>
         <input type="number" name="study duration" value="<%= studyDur %>"min = "0" step="0.1" id=studydur/>
