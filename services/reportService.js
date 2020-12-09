@@ -1,11 +1,12 @@
 import { executeQuery } from "../database/database.js"
+import * as vdService from "./validationService.js"
 /**
  * Functions that handle inserting and retrieving
  * report data from the database go here
  */
 
  export const sendReportData = async(data) => {
-     if(data.hasOwnProperty('morning')) {
+     if(data.morning === true) {
         sendMorningData(data);
      } else {
         sendEveningData(data);
@@ -15,7 +16,7 @@ import { executeQuery } from "../database/database.js"
  //insert user specific morning report to db
 const sendMorningData = async(data) =>{
     const str = "INSERT INTO mornings (user_id, date, sleep_amount, sleep_quality, mood) VALUES ($1, $2, $3, $4, $5)"
-    executeQuery(str, data.user_id, data.date, data.sleepDur, data.sleepQaul, data.generalMood);
+    executeQuery(str, data.user_id, data.date, data.sleepDur, data.sleepQual, data.generalMood);
 }
 
 //insert user specific evening report to db
@@ -70,31 +71,52 @@ export const getWeeklyData = async(user_id, week) => {
     return weeklyData;
 }
 
-export const getReportData = async(request, session) => {
+export const getReportData = async(session, request) => {
+
+    let data = {
+        morning: true,
+        user_id: await session.get('user_id'),
+        date: '',
+        sleepDur: '',
+        sleepQual: '',
+        generalMood: '',
+        sportDur: '',
+        studyDur: '',
+        eatingReg: '',
+        eatingQual: '',
+
+        errors: {}
+    };
+
+    if(!request) {
+        return data;
+    }
+
     const body = request.body();
     const params = await body.value;
 
     if(params.has('morning')) {
-        const data = {
-            user_id: await session.get('user_id'),
-            date: params.get('date'),
-            sleepDur: Number(params.get('sleep duration')),
-            sleepQaul: Number(params.get('sleep quality')),
-            generalMood: Number(params.get('general mood'))
-        };
+        data.morning = true,
+        data.user_id = await session.get('user_id'),
+        data.date = params.get('date'),
+        data.sleepDur = Number(params.get('sleep duration')),
+        data.sleepQual = Number(params.get('sleep quality')),
+        data.generalMood = Number(params.get('general mood')),
         
+        data = await vdService.validateMorningData(data);
         return data;
-    } else {
-        const data = {
-            user_id: await session.get('user_id'),
-            date: params.get('date'),
-            sportDur: Number(params.get('sport duration')),
-            studyDur: Number(params.get('study duration')),
-            eatingReg: Number(params.get('eating regularity')),
-            eatingQual: Number(params.get('eating quality')),
-            generalMood: Number(params.get('general mood'))
-        };
 
+    } else {
+        data.morning = false,
+        data.user_id = await session.get('user_id'),
+        data.date = params.get('date'),
+        data.sportDur = Number(params.get('sport duration')),
+        data.studyDur = Number(params.get('study duration')),
+        data.eatingReg = Number(params.get('eating regularity')),
+        data.eatingQual = Number(params.get('eating quality')),
+        data.generalMood = Number(params.get('general mood')),
+
+        data = await validateEveningData(data);
         return data;
     }
 }

@@ -23,13 +23,13 @@
         <input type="date" name="date" id="date1"/>
     
         <label for="sleepdur">sleeping duration</label>
-        <input type="number" name="sleep duration" min = "0" step="0.1" id="sleepdur"/>
+        <input type="number" name="sleep duration" value="<%= sleepDur %>" step="0.1" id="sleepdur"/>
         
         <label for="sleppqual">sleeping quality</label>
-        <input type="number" name="sleep quality" min = "1" max = "5" id="sleepqual"/>
+        <input type="number" name="sleep quality" value="<%= sleepQual %>" min = "1" max = "5" id="sleepqual"/>
         
         <label for="generalmood1">general mood</label>    
-        <input type="number" name="general mood" min = "1" max = "5" id="generalmood1"/>
+        <input type="number" name="general mood" value="<%= generalMood %>" min = "1" max = "5" id="generalmood1"/>
         
         <input type="submit" value="Submit!" />
     </form>
@@ -50,23 +50,25 @@
         <input type="date" name="date" id="date2"/>
 
         <label for="sportdur">sporting duration</label>
-        <input type="number" name="sport duration" min = "0" step="0.1" id="sportdur"/>
+        <input type="number" name="sport duration" value="<%= sportDur %>" min = "0" step="0.1" id="sportdur"/>
 
         <label for="studydur">studying duration</label>
-        <input type="number" name="study duration" min = "0" step="0.1" id=studydur/>
+        <input type="number" name="study duration" value="<%= studyDur %>"min = "0" step="0.1" id=studydur/>
 
         <label for="eatingreg">eating regularity</label>
-        <input type="number" name="eating regularity" min = "1" max = "5" id="eatingreg"/>
+        <input type="number" name="eating regularity" value="<%= eatingReg %>" min = "1" max = "5" id="eatingreg"/>
 
         <label for="eatingqual">eating quality</label>
-        <input type="number" name="eating quality" min = "1" max = "5" id="eatingqual"/>
+        <input type="number" name="eating quality" value="<%= eatingQual %>" min = "1" max = "5" id="eatingqual"/>
 
         <label for="generalmood2">general mood</label>
-        <input type="number" name="general mood" min = "1" max = "5" id="generalmood2"/>
+        <input type="number" name="general mood" value="<%= generalMood %>" min = "1" max = "5" id="generalmood2"/>
         
         <input type="submit" value="Submit!" />
         </form>
 </block>
+
+<%- include('./partials/errors.ejs') %>
 
 </div>
 

@@ -16,6 +16,22 @@ const loginRules = {
     password: [vs.required]
 };
 
+const morningRules = {
+    date: [vs.required, vs.isDate],
+    sleepDur: [vs.required, vs.minNumber(0)],
+    sleepQual: [vs.required, vs.numberBetween(1, 5)],
+    generalMood: [vs.required, vs.numberBetween(1, 5)]
+};
+
+const eveningRules = {
+    date: [vs.required, vs.isDate],
+    sportDur: [vs.required, vs.minNumber(0)],
+    studyDur: [vs.required, vs.minNumber(0)],
+    eatingReg: [vs.required, vs.numberBetween(1, 5)],
+    eatingQual: [vs.required, vs.numberBetween(1, 5)],
+    generalMood: [vs.required, vs.numberBetween(1, 5)]
+};
+
 ////////////////////////////////////////////////////////////////////////////////
 //validation functions here
 ////////////////////////////////////////////////////////////////////////////////
@@ -75,5 +91,19 @@ export const validateLoginData = async (data) => {
     } else if(passes && ! await passwordMatches(data.email, data.password)) {
             data.errors.email = {required: "wrong password or email" };
     }
+    return data;
+}
+
+export const validateMorningData = async (data) => {
+    const [passes, errors] = await vs.validate(data, morningRules);
+    data.errors = errors;
+
+    return data;
+}
+
+export const validateEveningData = async (data) => {
+    const [passes, errors] = await vs.validate(data, eveningRules);
+    data.errors = errors;
+
     return data;
 }

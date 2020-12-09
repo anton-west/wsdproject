@@ -58,20 +58,36 @@ const logoutUser = async ({session, response}) => {
 
 const showReportingPage = async({ render, session }) => {
 
+    let data = await rprtService.getReportData(session);
+
     const morningDone = await rprtService.morningReportDone(session);
     const eveningDone = await rprtService.eveningReportDone(session);
 
-    const data = {
-        morningDone: morningDone,
-        eveningDone: eveningDone
-    };  
+    data.morningDone = morningDone;
+    data.eveningDone = eveningDone;
+
+    console.log(data);
 
     render('reporting.ejs', data);
 }
 
-const handleReportData = async({request, session}) => {
-    const reportData = await rprtService.getReportData(request, session);
-    rprtService.sendReportData(reportData);
+const handleReportData = async({request, render, session, response}) => {
+    const reportData = await rprtService.getReportData(session, request);
+
+    console.log(reportData);
+
+    if(Object.keys(reportData.errors).length === 0) {
+        rprtService.sendReportData(reportData);
+        response.redirect('/behavior/reporting');
+    }
+
+    const morningDone = await rprtService.morningReportDone(session);
+    const eveningDone = await rprtService.eveningReportDone(session);
+
+    reportData.morningDone = morningDone;
+    reportData.eveningDone = eveningDone;
+
+    render('reporting.ejs', reportData);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
