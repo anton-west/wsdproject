@@ -30,14 +30,14 @@ const showLogoutPage = async({render}) => {
     render('logout.ejs');
 }
 
-const registerUser = async ({request, render}) => {
+const registerUser = async ({request, render, response}) => {
     let data = await userService.getRegistrationData(request);  //get data
     data = await vdService.validateRegistrationData(data);      //validate data
 
     //if there are no error keys, then validation succeeded
     if(Object.keys(data.errors).length === 0) {
         userService.addUser(data.email, data.password);
-        response.redirect('/auth/login');
+        showLoginPage(render);
     } else {
         render('register.ejs', data);
     }
