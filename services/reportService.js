@@ -54,8 +54,6 @@ export const getMonthlyData = async(user_id, month) => {
         generalMood: Number(mood.rows[0][0]).toPrecision(precision)
     }
 
-    console.log(monthlyData);
-
     return monthlyData;
 }
 
@@ -75,8 +73,6 @@ export const getWeeklyData = async(user_id, week) => {
         studyDur: Number(studyDur.rows[0][0]).toPrecision(precision),
         generalMood: Number(mood.rows[0][0]).toPrecision(precision)
     }
-
-    console.log(weeklyData);
 
     return weeklyData;
 }
@@ -205,6 +201,6 @@ export const getDayData = async(dateString) => {
         studyDuration: Number(studyDur.rows[0][0]).toPrecision(precision),
         generalMood: Number(mood.rows[0][0]).toPrecision(precision)
     }
-    console.log(sleepDur);
+    
     return dayData;
 }

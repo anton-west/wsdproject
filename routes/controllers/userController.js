@@ -30,7 +30,7 @@ const showLogoutPage = async({render}) => {
     render('logout.ejs');
 }
 
-const registerUser = async ({request, render}) => {
+const registerUser = async ({request, render, response}) => {
     let data = await userService.getRegistrationData(request);  //get data
     data = await vdService.validateRegistrationData(data);      //validate data
 
