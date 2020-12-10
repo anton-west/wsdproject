@@ -1,10 +1,10 @@
 let config = {};
 
 config.database = {
-  hostname: "ec2-176-34-123-50.eu-west-1.compute.amazonaws.com",
-  database: "da6ivbreqr84nh",
-  user: "xmgqllogmxgmle",
-  password: "7f5b175ed2df4d83d55944b589bd2ff1f19975f4325dbbcf46d0329568473ba7",
+  hostname: "ec2-18-203-7-163.eu-west-1.compute.amazonaws.com",
+  database: "dbe6gkamhig3jc",
+  user: "efxitbikozgxoj",
+  password: "bb89b959b427e5747b4ccc144480278d5194366743917bf470189810483a5326",
   port: 5432
 };
 
