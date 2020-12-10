@@ -5,6 +5,12 @@ import { router } from "./routes/routes.js";
 import { Session } from "./deps.js"
 import { oakCors } from "./deps.js";
 
+let port = 7777;
+if (Deno.args.length > 0) {
+  const lastArgument = Deno.args[Deno.args.length - 1];
+  port = Number(lastArgument);
+}
+
 const app = new Application();
 
 const ejsEngine = engineFactory.getEjsEngine();
@@ -26,4 +32,4 @@ app.use(middleware.checkAccessMiddleware);
 
 app.use(router.routes());
 
-app.listen({ port: 7777 });
+app.listen({ port: port });
