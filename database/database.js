@@ -2,7 +2,8 @@ import { Client } from "../deps.js";
 import { config } from "../config/config.js";
 
 const getClient = () => {
-    return new Client(config.database);
+    const DATABASE_URL = Deno.env.toObject().DATABASE_URL;
+    return new Client(DATABASE_URL);
 }
   
 const executeQuery = async(query, ...args) => {
