@@ -21,6 +21,7 @@ router.post('/behavior/reporting', userController.handleReportData);
 router.get('/behavior/summary', userController.showSummaryPage);
 router.post('/behavior/summary', userController.summaryPageInput);
 
-router.get('/api/summary', apiController.weekAverage;
+router.get('/api/summary', apiController.weekAverage);
+router.get('/api/summary/:year/:month/:day', apiController.AverageOnDay);
 
 export { router };

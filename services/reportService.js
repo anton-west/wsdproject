@@ -179,14 +179,32 @@ export const get7DayData = async() => {
     const mood = await executeQuery("SELECT AVG(m.mood) FROM (SELECT mood, date FROM mornings UNION ALL SELECT mood, date FROM evenings) AS m WHERE date > (DATE(NOW()) - 7) AND date <= DATE(NOW())");
 
     const weeklyData = {
-        sleepDur: Number(sleepDur.rows[0][0]).toPrecision(precision),
-        sleepQual: Number(sleepQual.rows[0][0]).toPrecision(precision),
-        sportDur: Number(sportDur.rows[0][0]).toPrecision(precision),
-        studyDur: Number(studyDur.rows[0][0]).toPrecision(precision),
+        sleepDuration: Number(sleepDur.rows[0][0]).toPrecision(precision),
+        sleepQuality: Number(sleepQual.rows[0][0]).toPrecision(precision),
+        sportDuration: Number(sportDur.rows[0][0]).toPrecision(precision),
+        studyDuration: Number(studyDur.rows[0][0]).toPrecision(precision),
         generalMood: Number(mood.rows[0][0]).toPrecision(precision)
     }
 
-    console.log(weeklyData);
-
     return weeklyData;
+}
+
+
+export const getDayData = async(dateString) => { 
+
+    const sleepDur = await executeQuery("SELECT AVG(sleep_amount) FROM mornings WHERE date = $1", dateString);
+    const sleepQual = await executeQuery("SELECT AVG(sleep_quality) FROM mornings WHERE date = $1", dateString);
+    const sportDur = await executeQuery("SELECT AVG(sport_amount), AVG(study_amount) FROM evenings WHERE date = $1", dateString);
+    const studyDur = await executeQuery("SELECT AVG(study_amount) FROM evenings WHERE date = $1", dateString);
+    const mood = await executeQuery("SELECT AVG(m.mood) FROM (SELECT mood, date FROM mornings UNION ALL SELECT mood, date FROM evenings) AS m WHERE date = $1", dateString);
+
+    const dayData = {
+        sleepDuration: Number(sleepDur.rows[0][0]).toPrecision(precision),
+        sleepQuality: Number(sleepQual.rows[0][0]).toPrecision(precision),
+        sportDuration: Number(sportDur.rows[0][0]).toPrecision(precision),
+        studyDuration: Number(studyDur.rows[0][0]).toPrecision(precision),
+        generalMood: Number(mood.rows[0][0]).toPrecision(precision)
+    }
+
+    return dayData;
 }
