@@ -1,7 +1,7 @@
-import { superoak } from "./deps.js"
-import { test } from "./deps.js"
-import * as userService from "./services/userService.js"
-import * as rprtService from "./services/reportService.js"
+import { superoak } from "../deps.js"
+import { test } from "../deps.js"
+import * as userService from "../services/userService.js"
+import * as rprtService from "../services/reportService.js"
 
 function compareKeys(a, b) {
     var aKeys = Object.keys(a).sort();

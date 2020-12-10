@@ -1,1 +1,0 @@
-web: deno run --allow-read --allow-net=:${PORT} app.js ${PORT}
