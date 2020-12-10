@@ -3,7 +3,7 @@ import { config } from "../config/config.js";
 
 const getClient = () => {
     const DATABASE_URL = Deno.env.toObject().DATABASE_URL;
-    
+    console.log(DATABASE_URL);
     if(DATABASE_URL) {
         return new Client(DATABASE_URL);
     } else {

@@ -9,6 +9,7 @@ let port = 7777;
 if (Deno.args.length > 0) {
     const lastArgument = Deno.args[Deno.args.length - 1];
     port = Number(lastArgument);
+    console.log(port);
 }
 
 const app = new Application();
