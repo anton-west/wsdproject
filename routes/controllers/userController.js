@@ -37,7 +37,7 @@ const registerUser = async ({request, render, response}) => {
     //if there are no error keys, then validation succeeded
     if(Object.keys(data.errors).length === 0) {
         userService.addUser(data.email, data.password);
-        showLoginPage(render);
+        response.redirect('/auth/login');
     } else {
         render('register.ejs', data);
     }
