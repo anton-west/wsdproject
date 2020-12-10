@@ -42,7 +42,8 @@ const checkAccessMiddleware = async ({request, session, response}, next) => {
     } else if(path.includes('/auth')) {
         await next();
     } else {
-
+        
+        //case comes here if user needs authentication
         if(await session.get('authenticated')) {
             await next();
         } else {
