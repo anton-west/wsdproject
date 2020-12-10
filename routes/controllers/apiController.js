@@ -9,12 +9,8 @@ const weekAverage = async ({response}) => {
 
 const AverageOnDay = async ({params, response}) => {
     
-    const date = new Date(
-        Number(params.year), 
-        Number(params.month) - 1, 
-        Number(params.day)
-    ).toISOString().substring(0,10);
-    
+    const date = params.year + "-" + params.month + "-" + params.day
+
     const result = await rprtService.getDayData(date);
 
     response.body = result;

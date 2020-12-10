@@ -205,6 +205,6 @@ export const getDayData = async(dateString) => {
         studyDuration: Number(studyDur.rows[0][0]).toPrecision(precision),
         generalMood: Number(mood.rows[0][0]).toPrecision(precision)
     }
-
+    console.log(sleepDur);
     return dayData;
 }
