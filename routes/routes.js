@@ -1,6 +1,7 @@
 import { Router } from "../deps.js";
 
 import * as userController from "./controllers/userController.js"
+import * as apiController from "./controllers/apiController.js"
 
 const router = new Router();
 
@@ -19,5 +20,7 @@ router.post('/behavior/reporting', userController.handleReportData);
 
 router.get('/behavior/summary', userController.showSummaryPage);
 router.post('/behavior/summary', userController.summaryPageInput);
+
+router.get('/api/summary', apiController.weekAverage;
 
 export { router };
