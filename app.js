@@ -7,8 +7,8 @@ import { oakCors } from "./deps.js";
 
 let port = 7777;
 if (Deno.args.length > 0) {
-  const lastArgument = Deno.args[Deno.args.length - 1];
-  port = Number(lastArgument);
+    const lastArgument = Deno.args[Deno.args.length - 1];
+    port = Number(lastArgument);
 }
 
 const app = new Application();
