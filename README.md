@@ -42,9 +42,23 @@ Running the App Locally
 To run the web application locally, create the needed tables in your database. Then copy
 your database information and credentials into`config.database`object in `./config/config.js`.
 
-Then use the command`deno run --allow-net --allow-env --allow-read --unstable app.js`in the root folder of the project.
+Then run the command`deno run --allow-net --allow-env --allow-read --unstable app.js`in the root folder of the project.
 
 The application uses port 7777 by default. visit the site at [http://localhost:7777/](http://localhost:7777/)
+
+Using the Application
+---------------------
+
+You will be presented with the landing page when you first visit the site.
+Login at "/auth/login" or register a "/auth/registration". 
+You can also use the links at the landing page. You need to be logged in
+to access the summary and report pages. They are found at "/behavior/summary"
+and at "/behavior/reporting". If you are logged in, then you can use the links
+at the landing page to access these pages. Fill in the forms to make a report.
+A new report will overwrite an old one, if it exists for that day. You can
+choose what week or month you want to inspect on the summary page. The summary
+page will only show statistics about this year i.e. 2020. So the months and weeks
+will only correspond to months and weeks in the year 2020. 
 
 Running the tests
 -----------------
