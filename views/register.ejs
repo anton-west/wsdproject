@@ -1,4 +1,4 @@
-<%- include('./partials/header.ejs') %>
+<%- await include('./views/partials/header.ejs') %>
 
 <div class="content">
     <h1>Register!</h1>
@@ -16,7 +16,7 @@
         <input type="submit" value="Register!" />
     </form>
 
-    <%- include('./partials/errors.ejs') %>
+    <%- include('./views/partials/errors.ejs') %>
 </div>
 
-<%- include('./partials/footer.ejs') %>
+<%- await include('./views/partials/footer.ejs') %>
