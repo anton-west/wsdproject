@@ -16,6 +16,11 @@
         <input type="submit" value="Register!" />
     </form>
 
+    <% Object.keys(errors).forEach((attribute) => { %>
+        <% Object.values(errors[attribute]).forEach((err) => { %>
+            <li><%= err %></li>
+        <% }); %>
+    <% }); %>
 
 </div>
 

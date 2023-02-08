@@ -9,7 +9,11 @@
         <input type="submit" value="Login!" />
     </form>
     
-    
+    <% Object.keys(errors).forEach((attribute) => { %>
+        <% Object.values(errors[attribute]).forEach((err) => { %>
+            <li><%= err %></li>
+        <% }); %>
+    <% }); %>
 
     <p>Don't have an account? <a href="/auth/registration">Click here to register!</a></p>
 
