@@ -6,9 +6,9 @@ import * as rprtService from "../../services/reportService.js"  //reporting serv
 //landing page
 ////////////////////////////////////////////////////////////////////////////////
 
-const showLandingPage = async({render, session}) => {
+const showLandingPage = async({render, state, session}) => {
     const data = {
-        authenticated: false,
+        authenticated: await state.session.get('authenticated'),
         condition: await rprtService.getCondition()
     };
     render('index.ejs', data);
@@ -43,23 +43,23 @@ const registerUser = async ({request, render, response}) => {
     }
 }
 
-const loginUser = async ({request, response, session, render}) => {
+const loginUser = async ({request, response, state, render}) => {
     let data = await userService.getLoginData(request); //get data
     data = await vdService.validateLoginData(data);     //validate data
 
     //if there are no error keys, then validation succeeded and user can login
     if (Object.keys(data.errors).length === 0) {
         //set some session cookies    
-        await session.set("authenticated", true)
-        await session.set("user_id", userService.getUserId(data.email));
+        await state.session.set("authenticated", true)
+        await state.session.set("user_id", userService.getUserId(data.email));
         response.redirect('/');
     } else {
         render('login.ejs', data);
     }
 }
 
-const logoutUser = async ({session, response}) => {
-    session.set('authenticated', false);
+const logoutUser = async ({state, response}) => {
+    state.session.set('authenticated', false);
     response.redirect('/');
 }
 
@@ -68,11 +68,11 @@ const logoutUser = async ({session, response}) => {
 //reporting
 ////////////////////////////////////////////////////////////////////////////////
 
-const showReportingPage = async({ render, session }) => {
+const showReportingPage = async({ render, state }) => {
 
-    let data = await rprtService.getReportData(session);
+    let data = await rprtService.getReportData(state.session);
 
-    const user_id = await session.get('user_id');
+    const user_id = await state.session.get('user_id');
     const morningDone = await rprtService.morningReportDone(user_id);
     const eveningDone = await rprtService.eveningReportDone(user_id);
 
@@ -84,8 +84,8 @@ const showReportingPage = async({ render, session }) => {
     render('reporting.ejs', data);
 }
 
-const handleReportData = async({request, render, session, response}) => {
-    const reportData = await rprtService.getReportData(session, request);
+const handleReportData = async({request, render, state, response}) => {
+    const reportData = await rprtService.getReportData(state.session, request);
 
     console.log(reportData);
 
@@ -93,7 +93,7 @@ const handleReportData = async({request, render, session, response}) => {
         rprtService.sendReportData(reportData);
         response.redirect('/behavior/reporting');
     }
-    const user_id = await session.get('user_id');
+    const user_id = await state.session.get('user_id');
     const morningDone = await rprtService.morningReportDone(user_id);
     const eveningDone = await rprtService.eveningReportDone(user_id);
 
@@ -107,7 +107,7 @@ const handleReportData = async({request, render, session, response}) => {
 //summary
 ////////////////////////////////////////////////////////////////////////////////
 
-const showSummaryPage = async({render, session, monthArg, weekArg}) => {
+const showSummaryPage = async({render, state, monthArg, weekArg}) => {
     let d = new Date();
     let nOfMonth = d.getMonth() + 1;
     if(monthArg != null && monthArg != "") {
@@ -119,7 +119,7 @@ const showSummaryPage = async({render, session, monthArg, weekArg}) => {
         nOfWeek = weekArg;
     }
 
-    const user_id = await session.get('user_id');
+    const user_id = await state.session.get('user_id');
     const month = await rprtService.getMonthlyData(user_id, nOfMonth);
     const week = await rprtService.getWeeklyData(user_id, nOfWeek);
 
@@ -135,7 +135,7 @@ const showSummaryPage = async({render, session, monthArg, weekArg}) => {
     render('summary.ejs', data);
 }
 
-const summaryPageInput = async({render, session, request}) => {
+const summaryPageInput = async({render, state, request}) => {
     const body = request.body();
     const params = await body.value;
 
@@ -143,7 +143,7 @@ const summaryPageInput = async({render, session, request}) => {
     const week = params.get('week');
 
     console.log("month: "+month+", week: "+week);
-
+    let session = state.session;
     await showSummaryPage({render, session, monthArg:month, weekArg:week});
 }
 

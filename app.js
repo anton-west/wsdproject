@@ -19,9 +19,10 @@ app.use(viewEngine(oakAdapter, dejsEngine, {
     viewRoot: "./views"
 }));
 
-//const session = new Session({ framework: "oak" });
-//await session.init();
-//app.use(session.use()(session));
+// Apply sessions to your Oak application.
+// You can also apply the middleware to specific routes instead of the whole app.
+// Without params, default MemoryStore is used. See the Storage chapter below for more info.
+app.use(Session.initMiddleware())
 
 app.use(oakCors());
 
