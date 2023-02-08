@@ -1,5 +1,5 @@
 import { Application } from "./deps.js";
-import { viewEngine, engineFactory, adapterFactory } from "./deps.js"
+import { viewEngine, dejsEngine, oakAdapter } from "./deps.js"
 import * as middleware from './middlewares/middlewares.js';
 import { router } from "./routes/routes.js";
 import { Session } from "./deps.js"
@@ -13,15 +13,15 @@ if (Deno.args.length > 0) {
 
 const app = new Application();
 
-const ejsEngine = engineFactory.getEjsEngine();
-const oakAdapter = adapterFactory.getOakAdapter();
-app.use(viewEngine(oakAdapter, ejsEngine, {
+//const ejsEngine = engineFactory.getEjsEngine();
+//const oakAdapter = adapterFactory.getOakAdapter();
+app.use(viewEngine(oakAdapter, dejsEngine, {
     viewRoot: "./views"
 }));
 
-const session = new Session({ framework: "oak" });
-await session.init();
-app.use(session.use()(session));
+//const session = new Session({ framework: "oak" });
+//await session.init();
+//app.use(session.use()(session));
 
 app.use(oakCors());
 

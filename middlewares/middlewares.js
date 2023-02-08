@@ -9,7 +9,8 @@ const errorMiddleware = async(context, next) => {
 }
 
 const logMiddleware = async({ request, session }, next) => {
-    let user_id = await session.get('user_id');
+    //let user_id = await session.get('user_id');
+    let user_id = 123;
     if(!user_id) {
         user_id = 'anonymous';
     }
