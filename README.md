@@ -40,9 +40,9 @@ CREATE TABLE evenings(
 Running the App Locally
 -----------------------
 To run the web application locally, create the needed tables in your database. Then copy
-your database information and credentials into`config.database`object in `./config/config.js`.
+your database information and credentials into `config.database` object in `./config/config.js` .
 
-Then run the command`deno run --allow-net --allow-env --allow-read --unstable app.js`in the root folder of the project.
+Then run the command `deno run --allow-net --allow-env --allow-read --unstable app.js` in the root folder of the project.
 
 The application uses port 7777 by default. visit the site at [http://localhost:7777/](http://localhost:7777/)
 
