@@ -1,4 +1,4 @@
-<%- await include('./views/partials/header.ejs') %>
+<%- await include('./views/partials/header.ejs', { title: 'include example', authenticated: authenticated }) %>
 <div class="content">
     <h1>Login!</h1>
     <form method="POST">

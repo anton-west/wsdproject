@@ -1,4 +1,4 @@
-<%- await include('./views/partials/header.ejs') %>
+<%- await include('./views/partials/header.ejs', { title: 'include example', authenticated: authenticated }) %>
 
 <div class="content">
 
@@ -10,7 +10,7 @@
 
 <block style="display:block" id = "morning">
 
-    <h3>morngin report</h3>
+    <h3>morning report</h3>
 
     <% if(morningDone) { %>
         <p>A morning report for today has already been made</p>

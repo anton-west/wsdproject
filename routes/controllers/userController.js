@@ -18,16 +18,22 @@ const showLandingPage = async({render, state, session}) => {
 //loggin in and registering
 ////////////////////////////////////////////////////////////////////////////////
 
-const showLoginPage = async({render}) => {
-    render('login.ejs', await userService.getLoginData());
+const showLoginPage = async({render,state}) => {
+    let data = await userService.getLoginData();
+    data.authenticated = await state.session.get('authenticated');
+    render('login.ejs', data);
 }
 
-const showRegisterPage = async ({render}) => {
-    render('register.ejs', await userService.getRegistrationData());
+const showRegisterPage = async ({render,state}) => {
+    let data = await userService.getRegistrationData();
+    data.authenticated = await state.session.get('authenticated');
+    render('register.ejs', data);
 }
 
-const showLogoutPage = async({render}) => {
-    render('logout.ejs');
+const showLogoutPage = async({render,state}) => {
+    let data = {};
+    data.authenticated = await state.session.get('authenticated');
+    render('logout.ejs',data);
 }
 
 const registerUser = async ({request, render, response}) => {
@@ -71,6 +77,7 @@ const logoutUser = async ({state, response}) => {
 const showReportingPage = async({ render, state }) => {
 
     let data = await rprtService.getReportData(state.session);
+    data.authenticated = await state.session.get('authenticated');
 
     const user_id = await state.session.get('user_id');
     const morningDone = await rprtService.morningReportDone(user_id);
@@ -127,7 +134,8 @@ const showSummaryPage = async({render, state, monthArg, weekArg}) => {
         nOfMonth: nOfMonth,
         nOfWeek: nOfWeek,
         month: month,
-        week: week
+        week: week,
+        authenticated: await state.session.get('authenticated'),
     };
 
     console.log(data);
@@ -143,8 +151,8 @@ const summaryPageInput = async({render, state, request}) => {
     const week = params.get('week');
 
     console.log("month: "+month+", week: "+week);
-    let session = state.session;
-    await showSummaryPage({render, session, monthArg:month, weekArg:week});
+    
+    await showSummaryPage({render, state, monthArg:month, weekArg:week});
 }
 
 export { showLandingPage, showLoginPage, showRegisterPage, showLogoutPage, registerUser, loginUser, logoutUser,
