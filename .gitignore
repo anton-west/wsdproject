@@ -1,3 +1,4 @@
 *.zip
 *.env
+*.sh
 config/config.js
