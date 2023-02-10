@@ -1,4 +1,7 @@
 *.zip
 *.env
 *.sh
-config/config.js
+index.html
+log.out
+log.err
+*.sh
