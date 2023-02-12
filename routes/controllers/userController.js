@@ -99,15 +99,15 @@ const handleReportData = async({request, render, state, response}) => {
     if(Object.keys(reportData.errors).length === 0) {
         rprtService.sendReportData(reportData);
         response.redirect('/behavior/reporting');
+    } else {
+        const user_id = await state.session.get('user_id');
+        const morningDone = await rprtService.morningReportDone(user_id);
+        const eveningDone = await rprtService.eveningReportDone(user_id);
+    
+        reportData.morningDone = morningDone;
+        reportData.eveningDone = eveningDone;
+        render('reporting.ejs', reportData);
     }
-    const user_id = await state.session.get('user_id');
-    const morningDone = await rprtService.morningReportDone(user_id);
-    const eveningDone = await rprtService.eveningReportDone(user_id);
-
-    reportData.morningDone = morningDone;
-    reportData.eveningDone = eveningDone;
-
-    render('reporting.ejs', reportData);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
